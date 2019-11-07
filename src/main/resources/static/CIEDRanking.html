@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8"/>
+    <title>CIED排名</title>
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+    <link rel="stylesheet" type="text/css" href="css/mui.css"/>
+    <link rel="stylesheet" type="text/css" href="css/projectCss.css"/>
+    <link rel="stylesheet" type="text/css" href="css/iconfont1.css"/>
+</head>
+<body>
+
+
+<!--顶部QTD/YTD选择栏-->
+<div class="QTDYTD_body" style="">
+    <div id="QTD" class="QTDYTD_text" onclick="QTDButton();changeQYsign(0)">
+        QTD
+    </div>
+    <div id="YTD" class="QTDYTD_text" onclick="YTDButton();changeQYsign(1)">
+        YTD
+    </div>
+    <div id="QTD1" class="QTDYTD_bottom"></div>
+    <div id="QTD2" class="QTDYTD_bottom"></div>
+</div>
+
+<!--界面说明框-->
+<div id="X" class="style-delete" onclick="deleteDescription(),confirmDialog()">
+    <span class="mui-icon iconfont icon-shanchu"></span>
+</div>
+<section class="block select1" id="section" style="">
+    <input type="checkbox">
+    <div class="case-block" style="color: #A7A7A7;font-size: 13px;margin-bottom: 0px;margin-top: 5px;">
+        <div style="margin-left: 10px;">MORE</div>
+        <div style="margin-left: 10px;">CLOSE</div>
+    </div>
+    <div class="detail"
+         style="font-family: 'microsoft yahei';font-size:12px;margin: 0px 10px;text-align:
+    justify;">
+        <div>
+            <span class="iconfont " style="color: sandybrown;">
+                <img src="images/chart-desc.png" style="height: 18px;width: 18px">
+            </span>
+            <span style="font-size: 15px;">&nbsp;图表说明</span>
+        </div>
+        <!-- 这个div里放的是从bo里面取到的description信息 -->
+        <div id="description"></div>
+    </div>
+</section>
+<div id="blank" style="margin-top: 98px;">
+
+</div>
+<!--大区、小区、TSR -->
+<div class="mui-card">
+    <!--卡片布局页眉，放置标题-->
+    <div id="date" class="mui-card-header"
+         style="color: #A7A7A7; position: relative;margin-top: 5px;font-size: 13px;">
+    </div>
+    <!--内容区-->
+    <div class="mui-card-content">
+        <ul class="mui-table-view mui-grid-view mui-grid-9" style="width: 100%;">
+            <li id="region_block" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3 "
+                style="width: 33%;border: hidden;">
+                <a href="#" onclick="ajax_Region()">
+                    <span class="mui-icon iconfont icon-wanggediqiu  style-option" style="font-size: 25px;"></span><br/>
+                    <span class="mui-tab-label style-option">Region</span>
+                </a>
+            </li>
+            <li id="district_block" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"
+                style="width: 34%;border: hidden;">
+                <a href="#" onclick="ajax_District()">
+                    <span class="mui-icon iconfont icon-dingwei style-option" style="font-size: 25px;"></span><br/>
+                    <span class="mui-tab-label style-option">District</span>
+                </a>
+            </li>
+            <li id="TSR_block" class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"
+                style="width: 33%;border:hidden;">
+                <a href="#" onclick="ajax_TSR()">
+                    <span class="mui-icon iconfont icon-renshu style-option" style="font-size: 25px;"></span><br/>
+                    <span class="mui-tab-label style-option">TSR</span>
+                </a>
+            </li>
+
+        </ul>
+
+    </div>
+    <!--页脚，放置补充信息或支持的操作-->
+    <div class="mui-card-footer"
+         style="height: 10px;font-size: 12px;width: 100%;padding: 0px;margin: 0PX; background-color: #F7F7F7;">
+        <ul style="width: 33%;padding:0PX;text-align: center;color: #A7A7A7;" id="TotalRanking"
+            onclick="totalRanking()">
+            <li style="list-style: none;width:100%;" id="totalRankingName">Total Ranking
+                <img id="totalRankingIcon" src="images/desc-gray.png"
+                     style="height: 10px;width: 10px;vertical-align:middle;"></li>
+        </ul>
+        <ul style="width: 34%;padding:0;text-align: center;" id="BradyRanking">
+            <li style="list-style: none;width:100%;color: #A7A7A7;" id="bradyRankingName">Brady Ranking
+                <img id="bradyRankingIcon" src="images/desc-gray.png"
+                     style="height: 10px;width: 10px;vertical-align:middle;">
+            </li>
+        </ul>
+        <ul style="width: 33%;padding:0PX;text-align: center;">
+            <li style="list-style: none;width:100%;">
+                <!--<span class="mui-icon mui-icon-arrowthindown" style="font-size: 20px;font-weight: bold;"></span>--></li>
+        </ul>
+    </div>
+</div>
+
+<!--循环生成详细信息卡片视图-->
+<div id="circulation" style="font-size: 10px;background-color: #F7F7F7">
+
+</div>
+<!--等待加载状态-->
+<div id="loading" style="width: 100%;height:30px;margin: 10px 0 ;text-align: center; ">
+    <div style="width: 60px;margin-left: 50%;left: -30px;position: relative;">
+        <div class="wait"></div>
+        <div class="wait"></div>
+        <div class="wait"></div>
+        <div class="wait"></div>
+        <div class="wait"></div>
+    </div>
+</div>
+
+
+<script src="js/mui.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/mdtmobile.js" type="text/javascript" charset="utf-8"></script>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<script src="http://www.joywok.com/public/scripts/jssdk.js"></script>
+
+<script>
+    jw.config({
+        debug: false,   // 开启调试模式,调用的所有api的返回值会在客户端alert
+        //出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，
+        //仅在pc端时才会打印。
+        appid: '',      // 必填，公众号的唯一标识
+        timestamp: 0,   // 必填，生成签名的时间戳（10位）
+        nonceStr: '',   // 必填，生成签名的随机串
+        signature: '',  // 必填，签名，见附录
+        app_access_token: '',  // 免登录后获取的toke/n，应用于上传文件，下载文
+        //件等功能
+        corpid: '' // 企业ID
+    });
+
+    jw.ready = function () {
+        // config信息验证后会执行前端ready方法，所有接口调用都必须在
+        //config接口获得结果之后，config是一个客户端的异步操作，所以如果
+        //需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中
+        //调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调
+        //用，不需要放在ready函数中。
+        /*jw.showTabs({
+            tabs: [    // 在NavBar中显示Tab页
+                "YTD", "QTD"
+            ],
+            position: 'top',
+            style: "blue",
+            focusidx: 1
+        });*/
+        jw.getInfo({
+            success: function (res) {
+                // 以键值对的形式返回
+                // 如：{"info":{"id":"","name":"","title":"", … }}
+                $.ajax({
+                    url: "CIED/userName",
+                    type: "POST",
+                    data: res.info,
+                    success: function (data) {
+                        console.log("传输用户名成功！")
+                    },
+                    error: function (e) {
+                        alert("传用户名失败！");
+                    }
+                });
+            }
+        });
+        jw.setFuncBtns([{
+            type: logos,
+            name: "email",
+            logos: ["data:image/png;base64,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"]
+        }]);
+
+    }
+
+
+</script>
+<script>
+    var users = {name: "潘丽芬"};
+    $.ajax({
+        url: "CIEDRanking/appUserName",
+        type: "POST",
+        data: users,
+        success: function (data) {
+            console.log("传输用户名成功！")
+        },
+        error: function (e) {
+            console.log("传输用户名失败！")
+        }
+    });
+
+    var rankIcon = ["images/asc.png", "images/asc-gray.png", "images/desc.png", "images/desc-gray.png"];
+    var TotalclickNumber = 0;
+    totalRanking();
+
+    function totalRanking() {
+        TotalOrBrady = 0;//0表示Total，1表示Brady
+        $("#totalRankingName").css("color", "#00A8E1");
+        $("#bradyRankingName").css("color", "#A7A7A7");
+        $("#bradyRankingIcon").attr("src", rankIcon[3]);
+        if (TotalclickNumber % 2 == 0) {
+            asc_dsc_1 = 0;
+            $("#totalRankingIcon").attr("src", rankIcon[2]);
+        } else {
+            asc_dsc_1 = 1;
+            $("#totalRankingIcon").attr("src", rankIcon[0]);
+        }
+        sort();
+        TotalclickNumber++;
+    }
+
+    var BradyclickNumber = 0;
+    $('#BradyRanking').click(function () {
+        TotalOrBrady = 1;
+        $("#totalRankingName").css("color", "#A7A7A7");
+        $("#bradyRankingName").css("color", "#00A8E1");
+        $("#totalRankingIcon").attr("src", rankIcon[3]);
+
+        if (BradyclickNumber % 2 == 0) {
+            asc_dsc_1 = 0;
+            $("#bradyRankingIcon").attr("src", rankIcon[2]);
+        } else {
+            asc_dsc_1 = 1;
+            $("#bradyRankingIcon").attr("src", rankIcon[0]);
+        }
+        sort();
+        BradyclickNumber++;
+
+    })
+
+</script>
+
+</body>
+
+</html>

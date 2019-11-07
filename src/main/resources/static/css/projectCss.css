@@ -1,0 +1,240 @@
+/*顶部QTD/YTD导航栏*/
+
+.QTDYTD_body {
+    height: 48px;
+    background-color: #02A8E2;
+    width: 100%;
+}
+
+
+/*顶部QTD/YTD字体*/
+
+.QTDYTD_text {
+    font: "microsoft yahei";
+    color: white;
+    margin: auto;
+    text-align: center;
+    width: 50%;
+    float: left;
+    line-height: 46px;
+}
+
+
+/*顶部QTD/YTD下边白条*/
+
+.QTDYTD_bottom {
+    height: 2px;
+    background-color: #02A8E2;
+    width: 50%;
+    float: left;
+}
+
+
+/*大区、小区、TSR*/
+
+.style-option {
+    color: #00A8E1;
+    font: "microsoft yahei";
+    /*font-weight: bold;*/
+    font-size: 13px;
+    border: hidden;
+}
+
+.style-content {
+    background-color: white;
+}
+
+
+/*指标数据*/
+
+.style-content-data {
+    font: "microsoft yahei";
+    font-size: 15px;
+    color: #000000;
+    text-align: justify;
+    /*font-weight: bolder;*/
+}
+
+
+/*指标名称*/
+
+.style-content-index {
+    font-size: 11px;
+    color: burlywood;
+}
+
+.style-li {
+    border: hidden;
+}
+
+.select1 {
+    position: absolute;
+    z-index: 999;
+    background-color: #F7F7F7;
+}
+
+
+/*删除按钮X*/
+
+.style-delete {
+    position: absolute;
+    left: 90%;
+    top: 55px;
+    z-index: 1000;
+}
+
+/*排名图标*/
+.style-background {
+    width: 40px;
+    height: 30px;
+    padding: 4px 9px;
+    margin: 0px;
+    /*background-image: url(test1/images/redicon.png);*/
+    background-size: 25px;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 18px;
+    color: #000000;
+}
+
+/*等待加载时效果*/
+.wait {
+    width: 4px;
+    height: 4px;
+    border-radius: 2px;
+    background: #68b2ce;
+    float: left;
+    margin: 0 3px;
+    animation: wait linear 1s infinite;
+    -webkit-animation: wait linear 1s infinite;
+
+}
+
+.wait:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.wait:nth-child(2) {
+    animation-delay: 0.15s;
+
+}
+
+.wait:nth-child(3) {
+    animation-delay: 0.3s;
+
+}
+
+.wait:nth-child(4) {
+    animation-delay: 0.45s;
+
+}
+
+.wait:nth-child(5) {
+    animation-delay: 0.6s;
+
+}
+
+@keyframes wait {
+    0%, 60%, 100% {
+        transform: scale(1);
+    }
+    30% {
+        transform: scale(2.5);
+    }
+}
+
+@-webkit-keyframes wait {
+    0%, 60%, 100% {
+        transform: scale(1);
+    }
+    30% {
+        transform: scale(2.5);
+    }
+}
+
+/*说明信息部分的*/
+@charset "UTF-8";
+.title-block {
+    height: 26px;
+    text-align: center;
+}
+
+.block {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: reverse;
+    -ms-flex-flow: column-reverse nowrap;
+    flex-flow: column-reverse nowrap;
+    width: 100%;
+    margin: 0 auto;
+    font-size: 13px;
+    color: black;
+    line-height: 18px;
+    /*	border: 1px solid #999;*/
+    padding: 10px;
+}
+
+.block>.detail {
+    max-height: 59px;
+    margin-bottom: 0px;
+    overflow: hidden;
+}
+
+.block>.case-block {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: left;
+    -ms-flex-pack: left;
+    justify-content: left;
+    -webkit-box-align: left;
+    -ms-flex-align: left;
+    align-items: left;
+    width: 100%;
+    height: 20px;
+    margin: 0 auto 0;
+    color: #0e0e0e;
+    background: #F7F7F7;
+    /*border: 1px solid #0e0e0e;*/
+    border-radius: 5px;
+}
+
+.block>.case-block div:nth-of-type(1) {
+    display: block;
+}
+
+.block>.case-block div:nth-of-type(2) {
+    display: none;
+}
+
+.block>[type="checkbox"] {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 20px;
+    margin: -24px auto 0;
+    z-index: 1000;
+    opacity: 0;
+}
+
+.block>[type="checkbox"]:hover+.case-block {
+    background-color: #f5f5f5;
+}
+
+.block>[type="checkbox"]:checked+.case-block div:nth-of-type(1) {
+    display: none;
+}
+
+.block>[type="checkbox"]:checked+.case-block div:nth-of-type(2) {
+    display: block;
+}
+
+.block>[type="checkbox"]:checked+.case-block+.detail {
+    max-height: inherit;
+}
+
+
+
+

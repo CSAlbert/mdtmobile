@@ -1,0 +1,96 @@
+<html>
+<head>
+
+    <script src="js/jssdk.js"></script>
+    <script lang="javascript">
+        jw.config({
+            debug: false,   // 开启调试模式,调用的所有api的返回值会在客户端alert
+            //出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，
+            //仅在pc端时才会打印。
+            appid: '',      // 必填，公众号的唯一标识
+            timestamp: 0,   // 必填，生成签名的时间戳（10位）
+            nonceStr: '',   // 必填，生成签名的随机串
+            signature: '',  // 必填，签名，见附录
+            app_access_token: '',  // 免登录后获取的toke/n，应用于上传文件，下载文
+            //件等功能
+            corpid: '' // 企业ID
+        });
+
+        jw.ready = function(){
+            // config信息验证后会执行前端ready方法，所有接口调用都必须在
+            //config接口获得结果之后，config是一个客户端的异步操作，所以如果
+            //需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中
+            //调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调
+            //用，不需要放在ready函数中。
+            alert("hello world");
+            jw.showTabs({
+                tabs: [    // 在NavBar中显示Tab页
+                    "YTD", "QTD"
+                ],
+                position: 'top',
+                style: "blue",
+                focusidx: 1
+            });
+
+            // onJwSelectTab(index) = function (index) {
+            //     if(index==0){
+            //         alert("0");
+            //     } else if (index==1) {
+            //         alert("1");
+            //     }
+            // }
+
+            jw.checkJsApi({
+                jsApiList: ['aPay'],
+                success: function(res) {
+                    // 以键值对的形式返回，可用的api值1，不可用为0
+                    // 如：{"checkResult":{"setTitle ":1}}
+                    alert("success!");
+                    var test = res.checkResult;
+                    for(i=0; i<test.length; i++){
+                        alert("result is:" + test[i]);
+                    }
+                },
+                fail: function() {
+                    alert("failed!");
+                }
+            });
+        }
+
+
+
+        function test(){
+            //var test = jw.getInfo();
+            jw.checkJsApi({
+                jsApiList: ['aPay'],
+                success: function(res) {
+                    // 以键值对的形式返回，可用的api值1，不可用为0
+                    // 如：{"checkResult":{"setTitle ":1}}
+                    alert("success!");
+                    var test = res.checkResult;
+                    for(i=0; i<test.length; i++){
+                        alert("result is:" + test[i]);
+                    }
+                },
+                fail: function() {
+                    alert("failed!");
+                }
+            });
+        }
+    </script>
+
+    <script>
+        function jump() {
+            window.location.href="CIEDRanking.html"
+        }
+
+    </script>
+</head>
+<body>
+<h2>Hello World!</h2>
+<button type="button" onclick="test();">test</button>
+<button type="button" value="点击跳转" onclick="jump()">CIED</button>
+
+<div style='width: 100px;display:block;word-break: break-all;word-wrap: break-word;'> dfasdfadfdf dsafffffffffadsf</div>
+</body>
+</html>
