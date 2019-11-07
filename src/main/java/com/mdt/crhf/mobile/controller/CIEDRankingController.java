@@ -31,8 +31,8 @@ public class CIEDRankingController {
 
     private final Logger log = LoggerFactory.getLogger(CIEDRankingController.class);
 
-    // 存放从app取得的用户名
-    String appUserName = null;
+//    // 存放从app取得的用户名
+//     String appUserName = null;
 
     // 从配置文件取报表的cuid和reportName
     @Value("${webi.cied.ranking.region.cuid}")
@@ -53,19 +53,18 @@ public class CIEDRankingController {
     @Autowired
     private CIEDRankingService ciedRankingService;
 
-    /**
-     * 接收app登录用户的name
-     *
-     * @param request
-     */
-    @RequestMapping(value = "/appUserName", method = RequestMethod.POST)
-    public void saveAppUserName(HttpServletRequest request) {
-        log.debug("开始执行saveAppUserName");
-        appUserName = request.getParameter("name");
-        // TODO:根据jssdk获取的用户名进行相应改变
-        log.debug("成功接收appUserName：" + appUserName);
-
-    }
+//    /**
+//     * 接收app登录用户的name
+//     *
+//     * @param request
+//     */
+//    @RequestMapping(value = "/appUserName", method = RequestMethod.POST)
+//    public void saveAppUserName(HttpServletRequest request) {
+//        log.debug("开始执行saveAppUserName");
+//        appUserName = request.getParameter("name");
+//        // TODO:根据jssdk获取的用户名进行相应改变
+//        log.debug("成功接收appUserName：" + appUserName);
+//    }
 
     /**
      * CIEDRanking-Region
@@ -73,9 +72,10 @@ public class CIEDRankingController {
      * @return
      */
     @RequestMapping(value = "/Region", method = RequestMethod.POST)
-    public JSONObject getRegionData() {
+    public JSONObject getRegionData(HttpServletRequest request) {
         log.debug("开始执行CIEDRankingController里面的getRegionData方法。");
-
+        String appUserName = request.getParameter("name");
+        log.debug("成功接收appUserName：" + appUserName);
         BackendData backendData = new BackendData();
         JSONObject CIEDRankingRegionData = new JSONObject();
 
@@ -108,9 +108,9 @@ public class CIEDRankingController {
      * @return
      */
     @RequestMapping(value = "/District", method = RequestMethod.POST)
-    public JSONObject getDistrictData() {
+    public JSONObject getDistrictData(HttpServletRequest request) {
         log.debug("开始执行CIEDRankingController里面的getDistrictData方法。");
-
+        String appUserName = request.getParameter("name");
         BackendData backendData = new BackendData();
         JSONObject CIEDRankingDistrictData = new JSONObject();
 
@@ -143,9 +143,9 @@ public class CIEDRankingController {
      * @return
      */
     @RequestMapping(value = "/TSR", method = RequestMethod.POST)
-    public JSONObject getTSRData() {
+    public JSONObject getTSRData(HttpServletRequest request) {
         log.debug("开始执行CIEDRankingController里面的getTSRData方法。");
-
+        String appUserName = request.getParameter("name");
         BackendData backendData = new BackendData();
         JSONObject CIEDRankingTSRData = new JSONObject();
 

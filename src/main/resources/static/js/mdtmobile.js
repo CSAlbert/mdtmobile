@@ -1,14 +1,15 @@
 /**
  * 自建函数
  */
-
-//body里面的onload中需要打开时默认调用的函数
-window.onload = function () {
-    QTDButton();
-    // ajax_TSR();
-    // ajax_District();
-    ajax_Region();
-}
+//
+// //body里面的onload中需要打开时默认调用的函数
+// window.onload = function () {
+//     QTDButton();
+//     // ajax_TSR();
+//     // ajax_District();
+//     ajax_Region();
+//     totalRanking();
+// }
 
 //发送邮件弹窗
 function confirmDialog() {
@@ -18,7 +19,6 @@ function confirmDialog() {
         } else {
             alert("取消发送邮件");
         }
-
     });
 }
 
@@ -121,7 +121,6 @@ function YTD_Total_Ranking_Sort(x, y) {
 function sort() {
     if (tabType == 1) {
         if (QYsign == 0) {
-
             if (TotalOrBrady == 0) {
                 t1.mainData.sort(QTD_Total_Ranking_Sort);
             } else {
@@ -162,6 +161,46 @@ function sort() {
     }
 }
 
+var rankIcon = ["images/asc.png", "images/asc-gray.png", "images/desc.png", "images/desc-gray.png"];
+var TotalclickNumber = 0;
+var BradyclickNumber = 0;
+//TotalRanking函数
+function totalRanking() {
+    TotalOrBrady = 0;//0表示Total，1表示Brady
+    $("#totalRankingName").css("color", "#00A8E1");
+    $("#bradyRankingName").css("color", "#A7A7A7");
+    $("#bradyRankingIcon").attr("src", rankIcon[3]);
+    if (TotalclickNumber % 2 == 0) {
+        asc_dsc_1 = 0;
+        $("#totalRankingIcon").attr("src", rankIcon[2]);
+    } else {
+        asc_dsc_1 = 1;
+        $("#totalRankingIcon").attr("src", rankIcon[0]);
+    }
+
+    sort();
+    TotalclickNumber++;
+}
+
+
+function bradyRanking() {
+        TotalOrBrady = 1;
+        $("#totalRankingName").css("color", "#A7A7A7");
+        $("#bradyRankingName").css("color", "#00A8E1");
+        $("#totalRankingIcon").attr("src", rankIcon[3]);
+
+        if (BradyclickNumber % 2 == 0) {
+            asc_dsc_1 = 0;
+            $("#bradyRankingIcon").attr("src", rankIcon[2]);
+        } else {
+            asc_dsc_1 = 1;
+            $("#bradyRankingIcon").attr("src", rankIcon[0]);
+        }
+        sort();
+        BradyclickNumber++;
+}
+
+// var appUser = {"name":"潘丽芬"}
 
 //Region数据
 function ajax_Region() {
@@ -178,8 +217,10 @@ function ajax_Region() {
         url: "CIEDRanking/Region",
         type: "POST",    // 提交方式
         dataType: "json",
-        asycn: false,
+        async: false,
+        data:appUser,
         beforeSend: function () {
+
             showLoading(true);
         },
         complete: function (data) {
@@ -205,7 +246,7 @@ function ajax_Region() {
             sort();
         },
         error: function (data, XMLHttpRequest, textStatus, errorThrown) {
-            alert("Region获取数据失败！");
+            alert("Region数据获取失败！");
         }
     })
 }
@@ -224,7 +265,8 @@ function ajax_District() {
         url: "CIEDRanking/District",
         type: "POST",    // 提交方式
         dataType: "json",
-        asycn: false,
+        // async: false,
+        data:appUser,
         beforeSend: function () {
             showLoading(true);
         },
@@ -234,24 +276,10 @@ function ajax_District() {
         },
         success: function (data) {
             t2 = data;
-
-            /*日期数据*/
-            var dateString = data.formattedDate;
-            date = dateString.substring(dateString.length - 20);
-
-            /*将日期数据放入页面元素中*/
-            $("#date").append(date);
-            // document.getElementById("date").innerHTML = date;
-
-            /*取得描述信息，并放入相应位置*/
-            description = data.description.replace(/\r\n/g, "<br/>");
-            $("#description").append(description);
-            // document.getElementById("description").innerHTML = description;
-
             sort();
         },
         error: function (data, XMLHttpRequest, textStatus, errorThrown) {
-            alert("District获取数据失败！");
+            alert("District数据获取失败！");
         }
     })
 }
@@ -271,7 +299,8 @@ function ajax_TSR() {
         url: "CIEDRanking/TSR",
         type: "POST",    // 提交方式
         dataType: "json",
-        asycn: false,
+        // async: false,
+        data:appUser,
         beforeSend: function () {
             showLoading(true);
         },
@@ -281,23 +310,10 @@ function ajax_TSR() {
         },
         success: function (data) {
             t3 = data;
-            /*日期数据*/
-            var dateString = data.formattedDate;
-            date = dateString.substring(dateString.length - 20);
-
-            /*将日期数据放入页面元素中*/
-            $("#date").append(date);
-            // document.getElementById("date").innerHTML = date;
-
-            /*取得描述信息，并放入相应位置*/
-            description = data.description.replace(/\r\n/g, "<br/>");
-            $("#description").append(description);
-            // document.getElementById("description").innerHTML = description;
-
             sort();
         },
         error: function (data, XMLHttpRequest, textStatus, errorThrown) {
-            alert("TSR获取数据失败！");
+            alert("TSR数据获取失败！");
         }
     })
 }
