@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -71,6 +72,8 @@ public class CIEDRankingController {
      *
      * @return
      */
+
+
     @RequestMapping(value = "/Region", method = RequestMethod.POST)
     public JSONObject getRegionData(HttpServletRequest request) {
         log.debug("开始执行CIEDRankingController里面的getRegionData方法。");
@@ -88,13 +91,9 @@ public class CIEDRankingController {
             backendData.setCode(RestStatusCode.SUCCESS);
             backendData.setMessage("this is a logontoken");
             backendData.setData(CIEDRankingRegionData);
-        } catch (ParameterException e) {
+        } catch (Exception e) {
             log.info(e.getMessage());
-            backendData.setCode(RestStatusCode.ERROR_PARAMETER);
-            backendData.setMessage(e.getMessage());
-        } catch (SapBoException e) {
-            log.info(e.getMessage());
-            backendData.setCode(RestStatusCode.ERROR_SAPBO);
+            backendData.setCode(RestStatusCode.ERROR);
             backendData.setMessage(e.getMessage());
         }
 //        ResponseEntity<BackendData> responseEntity = new ResponseEntity<BackendData>(backendData, HttpStatus.OK);

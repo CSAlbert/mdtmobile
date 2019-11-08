@@ -7,7 +7,7 @@ package com.mdt.crhf.mobile.entity;
  * @Description 用来存放rest请求的返回数据，包括请求状态码、提示信息、数据
  */
 public class BackendData {
-    private int code = 10;
+    private int code = 0;
 
     // 在出现Exception的时候，用于存放Exception的信息
     private String message = "";

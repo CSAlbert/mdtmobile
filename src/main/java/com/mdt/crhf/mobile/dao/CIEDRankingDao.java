@@ -89,19 +89,15 @@ public class CIEDRankingDao {
 
             //从响应模型中获取响应实体
             HttpEntity responseEntity = response.getEntity();
-            if (responseEntity != null) {
-                String resp = null;
-                JSONObject jsonObject = null;
-                resp = EntityUtils.toString(responseEntity);
-                jsonObject = JSON.parseObject(resp);
-                logonToken = jsonObject.getString("logonToken");
-            }
-        } catch (ClientProtocolException e) {
-            throw new SapBoException("在CIEDRankingDao中调用getLogonToken方法出错。出错信息：url:" + boUrl +
-                    "/biprws/logon/long", e);
-        } catch (IOException e) {
-            throw new SapBoException("在CIEDRankingDao中调用getLogonToken方法出错。用户信息：" + userString + "; url:" + boUrl +
-                    "/biprws/logon/long", e);
+
+            String resp = null;
+            JSONObject jsonObject = null;
+            resp = EntityUtils.toString(responseEntity);
+            jsonObject = JSON.parseObject(resp);
+            logonToken = jsonObject.getString("logonToken");
+
+        } catch (Exception e) {
+            throw new SapBoException("在CIEDRankingDao中调用getLogonToken方法出错。用户信息：" + userString, e);
         } finally {
             try {
                 //释放资源
@@ -131,9 +127,10 @@ public class CIEDRankingDao {
         log.debug("CIEDRankingDao的getDocumentIdAndDescription方法开始执行");
 
         // 检查参数合法性
-        if (logonToken == null || logonToken.length() == 0|| cuid == null || cuid.length() == 0){
-            log.debug("在CIEDRankingDao中调用getDocumentIdAndDescription方法时参数异常。logonToken = "+logonToken+";cuid = "+cuid);
-            throw new ParameterException("在CIEDRankingDao中调用getDocumentIdAndDescription方法时参数异常。logonToken = "+logonToken+";cuid = "+cuid);
+        if (logonToken == null || logonToken.trim().equalsIgnoreCase("")
+                || cuid == null || cuid.trim().equalsIgnoreCase("")) {
+            log.debug("在CIEDRankingDao中调用getDocumentIdAndDescription方法时参数异常。logonToken = " + logonToken + ";cuid = " + cuid);
+            throw new ParameterException("在CIEDRankingDao中调用getDocumentIdAndDescription方法时参数异常。logonToken = " + logonToken + ";cuid = " + cuid);
         }
 
         JSONObject document = new JSONObject();
@@ -185,7 +182,7 @@ public class CIEDRankingDao {
             throw new SapBoException("在CIEDRankingDao中调用getDocumentIdAndDescription方法出错！", e);
         } catch (IOException e) {
             throw new SapBoException("在CIEDRankingDao中调用getDocumentIdAndDescription方法出错！", e);
-        }finally {
+        } finally {
             try {
                 //释放资源
                 if (httpClient != null) {
@@ -198,7 +195,7 @@ public class CIEDRankingDao {
                 throw new SapBoException("在CIEDRankingDao中调用getDocumentIdAndDescription方法时，释放资源出错！", e);
             }
         }
-        log.debug("CIEDRankingDao中getDocumentIdAndDescription方法运行成功，取得信息："+document);
+        log.debug("CIEDRankingDao中getDocumentIdAndDescription方法运行成功，取得信息：" + document);
         return document;
     }
 
@@ -214,9 +211,9 @@ public class CIEDRankingDao {
         log.debug("CIEDRankingDao的refreshDocumentWithParamenters方法开始执行");
 
         // 检查参数合法性
-        if (logonToken == null || logonToken.length() == 0 || documentId == null || documentId.length() == 0 || appUserName == null || appUserName.length() == 0){
-            log.debug("在CIEDRankingDao中调用refreshDocumentWithParamenters方法时参数异常。logonToken = "+logonToken+";documentId = "+documentId+";userName = "+appUserName);
-            throw new ParameterException("在CIEDRankingDao中调用refreshDocumentWithParamenters方法时参数异常。logonToken = "+logonToken+";documentId = "+documentId+";userName = "+appUserName);
+        if (logonToken == null || logonToken.length() == 0 || documentId == null || documentId.length() == 0 || appUserName == null || appUserName.length() == 0) {
+            log.debug("在CIEDRankingDao中调用refreshDocumentWithParamenters方法时参数异常。logonToken = " + logonToken + ";documentId = " + documentId + ";userName = " + appUserName);
+            throw new ParameterException("在CIEDRankingDao中调用refreshDocumentWithParamenters方法时参数异常。logonToken = " + logonToken + ";documentId = " + documentId + ";userName = " + appUserName);
         }
 
         //获取Http客户端
@@ -244,7 +241,7 @@ public class CIEDRankingDao {
             httpClient.execute(httpPut);
         } catch (IOException e) {
             throw new SapBoException("在CIEDRankingDao中调用refreshDocumentWithParamenters方法出错！", e);
-        }finally {
+        } finally {
             try {
                 //释放资源
                 if (httpClient != null) {
@@ -272,9 +269,9 @@ public class CIEDRankingDao {
         log.debug("开始执行getReportId方法");
 
         // 检查参数合法性
-        if (logonToken == null || logonToken.length() == 0|| documentId == null || documentId.length() == 0){
-            log.debug("在CIEDRankingDao中调用getDocumentIdAndDescription方法时参数异常。logonToken = "+logonToken+";cuid = "+documentId);
-            throw new ParameterException("在CIEDRankingDao中调用getDocumentIdAndDescription方法时参数异常。logonToken = "+logonToken+";cuid = "+documentId);
+        if (logonToken == null || logonToken.length() == 0 || documentId == null || documentId.length() == 0) {
+            log.debug("在CIEDRankingDao中调用getDocumentIdAndDescription方法时参数异常。logonToken = " + logonToken + ";cuid = " + documentId);
+            throw new ParameterException("在CIEDRankingDao中调用getDocumentIdAndDescription方法时参数异常。logonToken = " + logonToken + ";cuid = " + documentId);
         }
 
         // 存放document里面的所有report的信息
@@ -341,7 +338,7 @@ public class CIEDRankingDao {
                 throw new SapBoException("在CIEDRankingDao中调用getReportId方法出错！", e);
             }
         }
-        log.info("getReportId成功。取得信息："+reports);
+        log.info("getReportId成功。取得信息：" + reports);
         return reports;
     }
 
@@ -358,9 +355,9 @@ public class CIEDRankingDao {
         log.debug("开始执行getBoReportContent方法");
 
         // 检查参数合法性
-        if (logonToken == null || logonToken.length() == 0|| documentId == null || documentId.length() == 0|| reportId == null || reportId.length() == 0){
-            log.debug("在CIEDRankingDao中调用getDocumentIdAndDescription方法时参数异常。logonToken = "+logonToken+";documentId = "+documentId+";reportId = "+reportId);
-            throw new ParameterException("在CIEDRankingDao中调用getDocumentIdAndDescription方法时参数异常。logonToken = "+logonToken+";documentId = "+documentId+";reportId = "+reportId);
+        if (logonToken == null || logonToken.length() == 0 || documentId == null || documentId.length() == 0 || reportId == null || reportId.length() == 0) {
+            log.debug("在CIEDRankingDao中调用getDocumentIdAndDescription方法时参数异常。logonToken = " + logonToken + ";documentId = " + documentId + ";reportId = " + reportId);
+            throw new ParameterException("在CIEDRankingDao中调用getDocumentIdAndDescription方法时参数异常。logonToken = " + logonToken + ";documentId = " + documentId + ";reportId = " + reportId);
         }
 
         // 存储从BO取到的所有数据
@@ -439,9 +436,9 @@ public class CIEDRankingDao {
         log.debug("开始执行getBoDataBlockId方法");
 
         // 检查参数合法性
-        if (logonToken == null || logonToken.length() == 0|| documentId == null || documentId.length() == 0|| reportId == null || reportId.length() == 0){
-            log.debug("在CIEDRankingDao中调用getBoDataBlockId方法时参数异常。logonToken = "+logonToken+";documentId = "+documentId+";reportId = "+reportId);
-            throw new ParameterException("在CIEDRankingDao中调用getBoDataBlockId方法时参数异常。logonToken = "+logonToken+";documentId = "+documentId+";reportId = "+reportId);
+        if (logonToken == null || logonToken.length() == 0 || documentId == null || documentId.length() == 0 || reportId == null || reportId.length() == 0) {
+            log.debug("在CIEDRankingDao中调用getBoDataBlockId方法时参数异常。logonToken = " + logonToken + ";documentId = " + documentId + ";reportId = " + reportId);
+            throw new ParameterException("在CIEDRankingDao中调用getBoDataBlockId方法时参数异常。logonToken = " + logonToken + ";documentId = " + documentId + ";reportId = " + reportId);
         }
 
         JSONObject boDataBlockId = new JSONObject();
@@ -538,9 +535,9 @@ public class CIEDRankingDao {
         log.debug("开始执行getMainDataOfBoContent方法");
 
         // 检查参数合法性
-        if (boReportContent == null || boReportContent.length() == 0|| mainDataId == null || mainDataId.length() == 0){
-            log.debug("在CIEDRankingDao中调用getMainDataOfBoContent方法时参数异常。boReportContent = "+boReportContent+";mainDataId = "+mainDataId);
-            throw new ParameterException("在CIEDRankingDao中调用getMainDataOfBoContent方法时参数异常。boReportContent = "+boReportContent+";mainDataId = "+mainDataId);
+        if (boReportContent == null || boReportContent.length() == 0 || mainDataId == null || mainDataId.length() == 0) {
+            log.debug("在CIEDRankingDao中调用getMainDataOfBoContent方法时参数异常。boReportContent = " + boReportContent + ";mainDataId = " + mainDataId);
+            throw new ParameterException("在CIEDRankingDao中调用getMainDataOfBoContent方法时参数异常。boReportContent = " + boReportContent + ";mainDataId = " + mainDataId);
         }
 
         JSONArray mainData = new JSONArray();
@@ -629,9 +626,9 @@ public class CIEDRankingDao {
         log.debug("开始执行getFormattedDateOfBoContent方法");
 
         // 检查参数合法性
-        if (boReportContent == null || boReportContent.length() == 0|| formattedDateId == null || formattedDateId.length() == 0){
-            log.debug("在CIEDRankingDao中调用getMainDataOfBoContent方法时参数异常。boReportContent = "+boReportContent+";formattedDateId = "+formattedDateId);
-            throw new ParameterException("在CIEDRankingDao中调用getMainDataOfBoContent方法时参数异常。boReportContent = "+boReportContent+";formattedDateId = "+formattedDateId);
+        if (boReportContent == null || boReportContent.length() == 0 || formattedDateId == null || formattedDateId.length() == 0) {
+            log.debug("在CIEDRankingDao中调用getMainDataOfBoContent方法时参数异常。boReportContent = " + boReportContent + ";formattedDateId = " + formattedDateId);
+            throw new ParameterException("在CIEDRankingDao中调用getMainDataOfBoContent方法时参数异常。boReportContent = " + boReportContent + ";formattedDateId = " + formattedDateId);
         }
 
         String formattedDate = null;
@@ -650,8 +647,8 @@ public class CIEDRankingDao {
                 }
             }
         } catch (Exception e) {
-            log.warn("在CIEDRankingDao中调用getMainDataOfBoContent时解析数据出错。"+e);
-            throw new SapBoException("在CIEDRankingDao中调用getMainDataOfBoContent时解析数据出错。"+e);
+            log.warn("在CIEDRankingDao中调用getMainDataOfBoContent时解析数据出错。" + e);
+            throw new SapBoException("在CIEDRankingDao中调用getMainDataOfBoContent时解析数据出错。" + e);
         }
         log.info("getFormattedDateOfBoContent运行成功。");
         return formattedDate;
