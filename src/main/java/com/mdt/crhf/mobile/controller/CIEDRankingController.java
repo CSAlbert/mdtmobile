@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -61,7 +62,7 @@ public class CIEDRankingController {
      *
      * @param request
      */
-    @RequestMapping(value = "/InitializeBo", method = RequestMethod.POST)
+    @PostMapping(value = "/InitializeBo")
     public void initializeBo(HttpServletRequest request) throws Exception {
         HttpSession session = request.getSession();
 
@@ -77,7 +78,7 @@ public class CIEDRankingController {
         session.setAttribute("appUserName", appUserName);
         session.setAttribute("logonToken", logonToken);
 
-        log.debug("initializeBo执行成功！");
+        log.info("initializeBo执行成功！");
     }
 
     /**
@@ -86,7 +87,7 @@ public class CIEDRankingController {
      * @return
      */
 
-    @RequestMapping(value = "/Region", method = RequestMethod.POST)
+    @PostMapping(value = "/Region")
     public JSONObject getRegionData(HttpServletRequest request) {
         log.debug("开始执行CIEDRankingController里面的getRegionData方法。");
 
@@ -126,7 +127,7 @@ public class CIEDRankingController {
      *
      * @return
      */
-    @RequestMapping(value = "/District", method = RequestMethod.POST)
+    @PostMapping(value = "/District")
     public JSONObject getDistrictData(HttpServletRequest request) {
         log.debug("开始执行CIEDRankingController里面的getDistrictData方法。");
 
@@ -151,13 +152,9 @@ public class CIEDRankingController {
             backendData.setCode(RestStatusCode.SUCCESS);
             backendData.setMessage("this is a logontoken");
             backendData.setData(CIEDRankingDistrictData);
-        } catch (ParameterException e) {
+        }  catch (Exception e) {
             log.info(e.getMessage());
-            backendData.setCode(RestStatusCode.ERROR_PARAMETER);
-            backendData.setMessage(e.getMessage());
-        } catch (SapBoException e) {
-            log.info(e.getMessage());
-            backendData.setCode(RestStatusCode.ERROR_SAPBO);
+            backendData.setCode(RestStatusCode.ERROR);
             backendData.setMessage(e.getMessage());
         }
 //        ResponseEntity<BackendData> responseEntity = new ResponseEntity<BackendData>(backendData, HttpStatus.OK);
@@ -195,13 +192,9 @@ public class CIEDRankingController {
             backendData.setCode(RestStatusCode.SUCCESS);
             backendData.setMessage("this is a logontoken");
             backendData.setData(CIEDRankingTSRData);
-        } catch (ParameterException e) {
+        }  catch (Exception e) {
             log.info(e.getMessage());
-            backendData.setCode(RestStatusCode.ERROR_PARAMETER);
-            backendData.setMessage(e.getMessage());
-        } catch (SapBoException e) {
-            log.info(e.getMessage());
-            backendData.setCode(RestStatusCode.ERROR_SAPBO);
+            backendData.setCode(RestStatusCode.ERROR);
             backendData.setMessage(e.getMessage());
         }
 //        ResponseEntity<BackendData> responseEntity = new ResponseEntity<BackendData>(backendData, HttpStatus.OK);

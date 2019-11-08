@@ -128,8 +128,9 @@
 <script src="http://www.joywok.com/public/scripts/jssdk.js"></script>
 
 <script>
-    // var appUser ;
+
     // 变量声明
+    // var appUser = null;
     var appUser = {"name": "潘丽芬"};
     var QYsign = 0;
     var t1 = [];
@@ -177,9 +178,7 @@
                 appUser = res.info;
 
                 // getInfo取得appUserName后才能执行ajxa请求
-                QTDButton();
-                ajax_Region();
-                totalRanking();
+                savaDataToSession();
             }
         });
 
@@ -205,7 +204,6 @@
     }
 
     savaDataToSession();
-
 
 </script>
 </body>

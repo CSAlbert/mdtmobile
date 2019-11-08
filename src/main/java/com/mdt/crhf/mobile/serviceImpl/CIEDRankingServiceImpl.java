@@ -52,21 +52,18 @@ public class CIEDRankingServiceImpl implements ICIEDRankingService {
                     ",cuid = " + cuid + ",reportName = " + reportName);
         }
 
-        JSONObject document = new JSONObject(); // document的属性信息
-        String documentId = null; // 根据CUID取得的documentId
-        String description = null; // document的描述信息
-        JSONArray reports = new JSONArray(); // report列表
+        JSONObject document; // document的属性信息
+        String documentId; // 根据CUID取得的documentId
+        String description; // document的描述信息
+        JSONArray reports; // report列表
         String reportId = null; // 所需reportId
-        String boReportContent = null; // 从BO获取的一个report的所有信息
-        JSONObject dataBlockId = new JSONObject(); // 获取一个report的所需block信息
-        String mainDataBlockId = null; // 主体数据的blockId
-        String formattedDateBlockId = null; // 日期数据的blockId
-        String formattedDate = null; // 日期数据内容
-        JSONArray mainData = null; // 主数据
+        String boReportContent; // 从BO获取的一个report的所有信息
+        JSONObject dataBlockId; // 获取一个report的所需block信息
+        String mainDataBlockId; // 主体数据的blockId
+        String formattedDateBlockId; // 日期数据的blockId
+        String formattedDate; // 日期数据内容
+        JSONArray mainData; // 主数据
         JSONObject displayData = new JSONObject(); // 解析后的可供前端展示的所有数据组成的json数组格式
-
-//        // 取得logonToken
-//        logonToken = ciedRankingDao.getLogonToken();
 
         // 取document信息（documentId和description）
         document = ciedRankingDao.getDocumentIdAndDescription(logonToken, cuid);
@@ -75,6 +72,7 @@ public class CIEDRankingServiceImpl implements ICIEDRankingService {
 
         // 取数据前需要刷新报表
         ciedRankingDao.refreshDocumentWithParamenters(logonToken, documentId, appUserName);
+        log.info("成功刷新报表");
 
         // 获取report信息
         reports = ciedRankingDao.getReportId(logonToken, documentId);
@@ -103,7 +101,7 @@ public class CIEDRankingServiceImpl implements ICIEDRankingService {
         displayData.put("description",description);
         displayData.put("mainData",mainData);
 
-        log.debug("从BO系统完成所有取数操作，数据："+displayData);
+        log.info("从BO系统完成所有取数操作，数据："+displayData);
         return displayData;
     }
 }
