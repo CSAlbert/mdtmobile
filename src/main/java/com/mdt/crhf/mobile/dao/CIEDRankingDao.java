@@ -56,7 +56,6 @@ public class CIEDRankingDao {
      * @throws SapBoException
      */
     public String getLogonToken() throws SapBoException {
-        log.debug("开始执行getLogonToken方法");
 
         String logonToken = null;
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
@@ -68,6 +67,7 @@ public class CIEDRankingDao {
         user.setClientType("");
         user.setAuth(boAuth);
         user.setUserName(boUserName);
+
 
         //将Object转换成json字符串；
         String userString = JSON.toJSONString(user);
@@ -107,7 +107,7 @@ public class CIEDRankingDao {
                 if (response != null) {
                     response.close();
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 throw new SapBoException("在CIEDRankingDao中调用getLogonToken方法时，释放资源出错！", e);
             }
         }
@@ -129,7 +129,7 @@ public class CIEDRankingDao {
         // 检查参数合法性
         if (logonToken == null || logonToken.trim().equalsIgnoreCase("")
                 || cuid == null || cuid.trim().equalsIgnoreCase("")) {
-            log.debug("在CIEDRankingDao中调用getDocumentIdAndDescription方法时参数异常。logonToken = " + logonToken + ";cuid = " + cuid);
+            log.info("在CIEDRankingDao中调用getDocumentIdAndDescription方法时参数异常。logonToken = " + logonToken + ";cuid = " + cuid);
             throw new ParameterException("在CIEDRankingDao中调用getDocumentIdAndDescription方法时参数异常。logonToken = " + logonToken + ";cuid = " + cuid);
         }
 
@@ -168,19 +168,14 @@ public class CIEDRankingDao {
             //从响应模型中获取响应实体
             HttpEntity responseEntity = response.getEntity();
 
-            if (responseEntity != null) {
-                String resp = null;
-                JSONObject jsonObject = null;
-                resp = EntityUtils.toString(responseEntity);
-                jsonObject = JSON.parseObject(resp);
-                document.put("documentId", jsonObject.get("id").toString());
-                document.put("description", jsonObject.get("description").toString());
-            } else {
-                log.info("document的Get内容为空");
-            }
-        } catch (ClientProtocolException e) {
-            throw new SapBoException("在CIEDRankingDao中调用getDocumentIdAndDescription方法出错！", e);
-        } catch (IOException e) {
+            String resp = null;
+            JSONObject jsonObject = null;
+            resp = EntityUtils.toString(responseEntity);
+            jsonObject = JSON.parseObject(resp);
+            document.put("documentId", jsonObject.get("id").toString());
+            document.put("description", jsonObject.get("description").toString());
+
+        } catch (Exception e) {
             throw new SapBoException("在CIEDRankingDao中调用getDocumentIdAndDescription方法出错！", e);
         } finally {
             try {
@@ -211,8 +206,9 @@ public class CIEDRankingDao {
         log.debug("CIEDRankingDao的refreshDocumentWithParamenters方法开始执行");
 
         // 检查参数合法性
-        if (logonToken == null || logonToken.length() == 0 || documentId == null || documentId.length() == 0 || appUserName == null || appUserName.length() == 0) {
-            log.debug("在CIEDRankingDao中调用refreshDocumentWithParamenters方法时参数异常。logonToken = " + logonToken + ";documentId = " + documentId + ";userName = " + appUserName);
+        if (logonToken == null || logonToken.equalsIgnoreCase("") || documentId == null || documentId.equalsIgnoreCase("") || appUserName == null || appUserName.equalsIgnoreCase("")) {
+            log.info("在CIEDRankingDao中调用refreshDocumentWithParamenters方法时参数异常。logonToken = " + logonToken + ";" +
+                    "documentId = " + documentId + ";userName = " + appUserName);
             throw new ParameterException("在CIEDRankingDao中调用refreshDocumentWithParamenters方法时参数异常。logonToken = " + logonToken + ";documentId = " + documentId + ";userName = " + appUserName);
         }
 

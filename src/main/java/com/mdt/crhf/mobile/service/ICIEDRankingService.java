@@ -10,7 +10,7 @@ import com.mdt.crhf.mobile.exception.SapBoException;
  * @date 2019/11/2 12:53
  * @Description CIEDRanking的service层接口
  */
-public interface CIEDRankingService {
-    JSONObject getCIEDRankingData(String appUserName, String cuid, String reportName) throws ParameterException,
+public interface ICIEDRankingService {
+    JSONObject getCIEDRankingData(String appUserName,String logonToken, String cuid, String reportName) throws ParameterException,
             SapBoException;
 }

@@ -13,8 +13,8 @@
 
 //发送邮件弹窗
 function confirmDialog() {
-    mui.confirm("", "是否通过邮件将报表数据发送给您？", ["取消", "发送"], function(e) {
-        if(e.index == 1) {
+    mui.confirm("", "是否通过邮件将报表数据发送给您？", ["取消", "发送"], function (e) {
+        if (e.index == 1) {
             alert("已发送邮件");
         } else {
             alert("取消发送邮件");
@@ -58,16 +58,6 @@ function showLoading(show) {
     }
 }
 
-
-var QYsign = 0;
-var t1 = [];
-var t2 = [];
-var t3 = [];
-var tabType = 0;
-var asc_dsc_1 = 0;
-var TotalOrBrady = 0;
-var description = null;
-var date = null;
 
 //QTD、YTD转换
 function changeQYsign(sign) {
@@ -161,9 +151,25 @@ function sort() {
     }
 }
 
-var rankIcon = ["images/asc.png", "images/asc-gray.png", "images/desc.png", "images/desc-gray.png"];
-var TotalclickNumber = 0;
-var BradyclickNumber = 0;
+// 存appUserName和logonToken到session中
+function savaDataToSession() {
+    $.ajax({
+        url: "CIEDRanking/InitializeBo",
+        type: "POST",    // 提交方式
+        // async: false,
+        data: appUser,
+        success: function (data) {
+            console.log("成功设置session");
+            ajax_Region();
+            QTDButton();
+        },
+        error: function (data) {
+            console.log("设置session失败")
+        }
+    })
+}
+
+
 //TotalRanking函数
 function totalRanking() {
     TotalOrBrady = 0;//0表示Total，1表示Brady
@@ -184,20 +190,20 @@ function totalRanking() {
 
 
 function bradyRanking() {
-        TotalOrBrady = 1;
-        $("#totalRankingName").css("color", "#A7A7A7");
-        $("#bradyRankingName").css("color", "#00A8E1");
-        $("#totalRankingIcon").attr("src", rankIcon[3]);
+    TotalOrBrady = 1;
+    $("#totalRankingName").css("color", "#A7A7A7");
+    $("#bradyRankingName").css("color", "#00A8E1");
+    $("#totalRankingIcon").attr("src", rankIcon[3]);
 
-        if (BradyclickNumber % 2 == 0) {
-            asc_dsc_1 = 0;
-            $("#bradyRankingIcon").attr("src", rankIcon[2]);
-        } else {
-            asc_dsc_1 = 1;
-            $("#bradyRankingIcon").attr("src", rankIcon[0]);
-        }
-        sort();
-        BradyclickNumber++;
+    if (BradyclickNumber % 2 == 0) {
+        asc_dsc_1 = 0;
+        $("#bradyRankingIcon").attr("src", rankIcon[2]);
+    } else {
+        asc_dsc_1 = 1;
+        $("#bradyRankingIcon").attr("src", rankIcon[0]);
+    }
+    sort();
+    BradyclickNumber++;
 }
 
 // var appUser = {"name":"潘丽芬"}
@@ -217,8 +223,6 @@ function ajax_Region() {
         url: "CIEDRanking/Region",
         type: "POST",    // 提交方式
         dataType: "json",
-        async: false,
-        data:appUser,
         beforeSend: function () {
 
             showLoading(true);
@@ -242,8 +246,8 @@ function ajax_Region() {
             $("#description").append(description);
             // document.getElementById("description").innerHTML = description;
 
-
             sort();
+            totalRanking();
         },
         error: function (data, XMLHttpRequest, textStatus, errorThrown) {
             alert("Region数据获取失败！");
@@ -266,7 +270,6 @@ function ajax_District() {
         type: "POST",    // 提交方式
         dataType: "json",
         // async: false,
-        data:appUser,
         beforeSend: function () {
             showLoading(true);
         },
@@ -300,7 +303,6 @@ function ajax_TSR() {
         type: "POST",    // 提交方式
         dataType: "json",
         // async: false,
-        data:appUser,
         beforeSend: function () {
             showLoading(true);
         },
@@ -319,15 +321,7 @@ function ajax_TSR() {
 }
 
 //具体数据展示
-var index_Name = ["Total Ranking", "Total Ach%", "Total Gth% vs LY", "Brady Ranking", "Brady Ach%", "Brady Gth% vs LY"];
-var QTD_Index = ["QTD Total Ranking", "QTD Total Ach%", "QTD Total Gth% vs LY", "QTD Brady Ranking", "QTD Brady Ach%", "QTD Brady Gth% vs LY"];
-var YTD_Index = ["YTD Total Ranking", "YTD Total Ach%", "YTD Total Gth% vs LY", "YTD Brady Ranking", "YTD Brady" +
-" Ach%", "YTD Brady Gth% vs LY"];
-var QTD_Index_TSR = ["QTD Total Ranking", "QTD Total Ach%", "QTD Gth% vs LY", "QTD Brady Ranking", "QTD Brady" +
-" Ach%", "QTD Brady Gth% vs LY"];
 
-
-var ranking_images = ['images/pm1.png', 'images/pm2.png', 'images/pm3.png'];
 
 //根据数据生成详细内容列表（QTD-Region）
 function view_QTD_Region(data) {

@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.mdt.crhf.mobile.dao.CIEDRankingDao;
 import com.mdt.crhf.mobile.exception.ParameterException;
 import com.mdt.crhf.mobile.exception.SapBoException;
-import com.mdt.crhf.mobile.service.CIEDRankingService;
+import com.mdt.crhf.mobile.service.ICIEDRankingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
  */
 
 @Service
-public class CIEDRankingServiceImpl implements CIEDRankingService {
+public class CIEDRankingServiceImpl implements ICIEDRankingService {
 
     private final Logger log = LoggerFactory.getLogger(CIEDRankingServiceImpl.class);
 
@@ -43,7 +43,7 @@ public class CIEDRankingServiceImpl implements CIEDRankingService {
      * @throws SapBoException
      */
     @Override
-    public JSONObject getCIEDRankingData(String appUserName, String cuid, String reportName) throws ParameterException,
+    public JSONObject getCIEDRankingData(String appUserName,String logonToken, String cuid, String reportName) throws ParameterException,
             SapBoException {
 
         // 检查参数合法性
@@ -52,8 +52,6 @@ public class CIEDRankingServiceImpl implements CIEDRankingService {
                     ",cuid = " + cuid + ",reportName = " + reportName);
         }
 
-        log.debug(reportName);
-        String logonToken = null; // 用户登录Token
         JSONObject document = new JSONObject(); // document的属性信息
         String documentId = null; // 根据CUID取得的documentId
         String description = null; // document的描述信息
@@ -67,8 +65,8 @@ public class CIEDRankingServiceImpl implements CIEDRankingService {
         JSONArray mainData = null; // 主数据
         JSONObject displayData = new JSONObject(); // 解析后的可供前端展示的所有数据组成的json数组格式
 
-        // 取得logonToken
-        logonToken = ciedRankingDao.getLogonToken();
+//        // 取得logonToken
+//        logonToken = ciedRankingDao.getLogonToken();
 
         // 取document信息（documentId和description）
         document = ciedRankingDao.getDocumentIdAndDescription(logonToken, cuid);

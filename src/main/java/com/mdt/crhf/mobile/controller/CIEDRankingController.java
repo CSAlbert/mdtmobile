@@ -2,22 +2,22 @@ package com.mdt.crhf.mobile.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.mdt.crhf.mobile.config.RestStatusCode;
+import com.mdt.crhf.mobile.dao.CIEDRankingDao;
 import com.mdt.crhf.mobile.entity.BackendData;
 import com.mdt.crhf.mobile.exception.ParameterException;
-import com.mdt.crhf.mobile.service.CIEDRankingService;
+import com.mdt.crhf.mobile.service.ICIEDRankingService;
 import com.mdt.crhf.mobile.exception.SapBoException;
+import com.mdt.crhf.mobile.service.ILogonTokenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  * @author chulang
@@ -32,8 +32,6 @@ public class CIEDRankingController {
 
     private final Logger log = LoggerFactory.getLogger(CIEDRankingController.class);
 
-//    // 存放从app取得的用户名
-//     String appUserName = null;
 
     // 从配置文件取报表的cuid和reportName
     @Value("${webi.cied.ranking.region.cuid}")
@@ -52,20 +50,35 @@ public class CIEDRankingController {
     private String reportName_TSR;
 
     @Autowired
-    private CIEDRankingService ciedRankingService;
+    private ICIEDRankingService ICIEDRankingService;
 
-//    /**
-//     * 接收app登录用户的name
-//     *
-//     * @param request
-//     */
-//    @RequestMapping(value = "/appUserName", method = RequestMethod.POST)
-//    public void saveAppUserName(HttpServletRequest request) {
-//        log.debug("开始执行saveAppUserName");
-//        appUserName = request.getParameter("name");
-//        // TODO:根据jssdk获取的用户名进行相应改变
-//        log.debug("成功接收appUserName：" + appUserName);
-//    }
+    @Autowired
+    private ILogonTokenService ILogonTokenService;
+
+
+    /**
+     * 接收app登录用户的name,和取得Bo的logontoken，存到session中
+     *
+     * @param request
+     */
+    @RequestMapping(value = "/InitializeBo", method = RequestMethod.POST)
+    public void initializeBo(HttpServletRequest request) throws Exception {
+        HttpSession session = request.getSession();
+
+        // 定义appUserName、logonToken
+        String appUserName = null;
+        String logonToken = null;
+
+        // 对appUserName、logonToken赋值
+        appUserName = request.getParameter("name");
+        logonToken = ILogonTokenService.getLogonToken();
+
+        // 将appUserName、logonToken放到session中
+        session.setAttribute("appUserName", appUserName);
+        session.setAttribute("logonToken", logonToken);
+
+        log.debug("initializeBo执行成功！");
+    }
 
     /**
      * CIEDRanking-Region
@@ -73,19 +86,26 @@ public class CIEDRankingController {
      * @return
      */
 
-
     @RequestMapping(value = "/Region", method = RequestMethod.POST)
     public JSONObject getRegionData(HttpServletRequest request) {
         log.debug("开始执行CIEDRankingController里面的getRegionData方法。");
-        String appUserName = request.getParameter("name");
-        log.debug("成功接收appUserName：" + appUserName);
+
+        // 定义appUserName、logonToken
+        String appUserName = null;
+        String logonToken = null;
+
+        // 通过session获取appUserName、logonToken的值
+        appUserName = request.getSession().getAttribute("appUserName").toString();
+        logonToken = request.getSession().getAttribute("logonToken").toString();
+
         BackendData backendData = new BackendData();
         JSONObject CIEDRankingRegionData = new JSONObject();
 
         try {
             // 取得region的所有数据
-            CIEDRankingRegionData = ciedRankingService.getCIEDRankingData(appUserName, CUID_Region, reportName_Region);
-            log.debug("region请求状态码：" + RestStatusCode.SUCCESS);
+            CIEDRankingRegionData = ICIEDRankingService.getCIEDRankingData(appUserName, logonToken, CUID_Region,
+                    reportName_Region);
+            log.info("region请求状态码：" + RestStatusCode.SUCCESS);
 
             // 将请求状态、提示信息、数据存到实体类
             backendData.setCode(RestStatusCode.SUCCESS);
@@ -109,13 +129,22 @@ public class CIEDRankingController {
     @RequestMapping(value = "/District", method = RequestMethod.POST)
     public JSONObject getDistrictData(HttpServletRequest request) {
         log.debug("开始执行CIEDRankingController里面的getDistrictData方法。");
-        String appUserName = request.getParameter("name");
+
+        // 定义appUserName、logonToken
+        String appUserName = null;
+        String logonToken = null;
+
+        // 通过session获取appUserName、logonToken的值
+        appUserName = request.getSession().getAttribute("appUserName").toString();
+        logonToken = request.getSession().getAttribute("logonToken").toString();
+
         BackendData backendData = new BackendData();
         JSONObject CIEDRankingDistrictData = new JSONObject();
 
         try {
             // 取得region的所有数据
-            CIEDRankingDistrictData = ciedRankingService.getCIEDRankingData(appUserName, CUID_District, reportName_District);
+            CIEDRankingDistrictData = ICIEDRankingService.getCIEDRankingData(appUserName, logonToken, CUID_District,
+                    reportName_District);
             log.debug("district请求状态码：" + RestStatusCode.SUCCESS);
 
             // 将请求状态、提示信息、数据存到实体类
@@ -144,13 +173,22 @@ public class CIEDRankingController {
     @RequestMapping(value = "/TSR", method = RequestMethod.POST)
     public JSONObject getTSRData(HttpServletRequest request) {
         log.debug("开始执行CIEDRankingController里面的getTSRData方法。");
-        String appUserName = request.getParameter("name");
+
+        // 定义appUserName、logonToken
+        String appUserName = null;
+        String logonToken = null;
+
+        // 通过session获取appUserName、logonToken的值
+        appUserName = request.getSession().getAttribute("appUserName").toString();
+        logonToken = request.getSession().getAttribute("logonToken").toString();
+
         BackendData backendData = new BackendData();
         JSONObject CIEDRankingTSRData = new JSONObject();
 
         try {
             // 取得region的所有数据
-            CIEDRankingTSRData = ciedRankingService.getCIEDRankingData(appUserName, CUID_TSR, reportName_TSR);
+            CIEDRankingTSRData = ICIEDRankingService.getCIEDRankingData(appUserName, logonToken, CUID_TSR,
+                    reportName_TSR);
             log.debug("region请求状态码：" + RestStatusCode.SUCCESS);
 
             // 将请求状态、提示信息、数据存到实体类

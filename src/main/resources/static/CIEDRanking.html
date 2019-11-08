@@ -129,7 +129,29 @@
 
 <script>
     // var appUser ;
+    // 变量声明
     var appUser = {"name": "潘丽芬"};
+    var QYsign = 0;
+    var t1 = [];
+    var t2 = [];
+    var t3 = [];
+    var tabType = 0;
+    var asc_dsc_1 = 0;
+    var TotalOrBrady = 0;
+    var description = null;
+    var date = null;
+    var rankIcon = ["images/asc.png", "images/asc-gray.png", "images/desc.png", "images/desc-gray.png"];
+    var TotalclickNumber = 0;
+    var BradyclickNumber = 0;
+    var index_Name = ["Total Ranking", "Total Ach%", "Total Gth% vs LY", "Brady Ranking", "Brady Ach%", "Brady Gth% vs LY"];
+    var QTD_Index = ["QTD Total Ranking", "QTD Total Ach%", "QTD Total Gth% vs LY", "QTD Brady Ranking", "QTD Brady Ach%", "QTD Brady Gth% vs LY"];
+    var YTD_Index = ["YTD Total Ranking", "YTD Total Ach%", "YTD Total Gth% vs LY", "YTD Brady Ranking", "YTD Brady" +
+    " Ach%", "YTD Brady Gth% vs LY"];
+    var QTD_Index_TSR = ["QTD Total Ranking", "QTD Total Ach%", "QTD Gth% vs LY", "QTD Brady Ranking", "QTD Brady" +
+    " Ach%", "QTD Brady Gth% vs LY"];
+    var ranking_images = ['images/pm1.png', 'images/pm2.png', 'images/pm3.png'];
+
+    // jssdk相关操作
     jw.config({
         debug: false,   // 开启调试模式,调用的所有api的返回值会在客户端alert
         //出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，
@@ -154,8 +176,7 @@
                 // 如：{"info":{"id":"","name":"","title":"", … }}
                 appUser = res.info;
 
-                alert(appUser);
-
+                // getInfo取得appUserName后才能执行ajxa请求
                 QTDButton();
                 ajax_Region();
                 totalRanking();
@@ -167,17 +188,14 @@
             name: "email",
             logos: ["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"]
         }]);
-
-
-
     }
 
-    console.log("appUser是否已经取到" + appUser.id)
     // 邮件的点击事件
     window.onJwNavBtnClick = function (data) {
-
+        // mui的弹窗组件
         mui.confirm("", "是否通过邮件将报表数据发送给您？", ["取消", "发送"], function (e) {
             if (e.index == 1) {
+                //TODO:具体的邮件发送功能
                 alert("已发送邮件");
             } else {
                 alert("取消发送邮件");
@@ -185,12 +203,9 @@
 
         });
     }
-    console.log("call from outside of jssdk");
-    // ajax_TSR();
-    // ajax_District();
-    // QTDButton();
-    // ajax_Region();
-    // totalRanking();
+
+    savaDataToSession();
+
 
 </script>
 </body>
