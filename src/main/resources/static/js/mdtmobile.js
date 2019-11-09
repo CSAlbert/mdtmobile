@@ -155,7 +155,7 @@ function savaDataToSession() {
             QTDButton();
         },
         error: function (data) {
-            console.log("设置session失败ff")
+            console.log("设置session失败ff失败失败")
         }
     })
 }
