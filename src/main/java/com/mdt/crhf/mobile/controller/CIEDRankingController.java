@@ -91,6 +91,9 @@ public class CIEDRankingController {
     public JSONObject getRegionData(HttpServletRequest request) {
         log.debug("开始执行CIEDRankingController里面的getRegionData方法。");
 
+        // TODO:利用backendData返回
+
+
         // 定义appUserName、logonToken
         String appUserName = null;
         String logonToken = null;
