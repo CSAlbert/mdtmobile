@@ -1,15 +1,6 @@
 /**
  * 自建函数
  */
-//
-// //body里面的onload中需要打开时默认调用的函数
-// window.onload = function () {
-//     QTDButton();
-//     // ajax_TSR();
-//     // ajax_District();
-//     ajax_Region();
-//     totalRanking();
-// }
 
 //发送邮件弹窗
 function confirmDialog() {

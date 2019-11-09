@@ -192,15 +192,7 @@
     // 邮件的点击事件
     window.onJwNavBtnClick = function (data) {
         // mui的弹窗组件
-        mui.confirm("", "是否通过邮件将报表数据发送给您？", ["取消", "发送"], function (e) {
-            if (e.index == 1) {
-                //TODO:具体的邮件发送功能
-                alert("已发送邮件");
-            } else {
-                alert("取消发送邮件");
-            }
-
-        });
+        confirmDialog();
     }
 
     savaDataToSession();
